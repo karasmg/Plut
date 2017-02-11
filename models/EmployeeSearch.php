@@ -12,6 +12,10 @@ use app\models\Employee;
  */
 class EmployeeSearch extends Employee
 {
+    public $sectorName;
+    public $departmentName;
+    public $fullName;
+
     /**
      * @inheritdoc
      */
@@ -19,7 +23,7 @@ class EmployeeSearch extends Employee
     {
         return [
             [['id', 'department_id', 'sector_id', 'status'], 'integer'],
-            [['first_name', 'middle_name', 'last_name'], 'safe'],
+            [['first_name', 'middle_name', 'last_name', 'fullName', 'sectorName', 'departmentName'], 'safe'],
         ];
     }
 
@@ -49,11 +53,34 @@ class EmployeeSearch extends Employee
             'query' => $query,
         ]);
 
-        $this->load($params);
+        $defSort = $dataProvider->getSort();
 
-        if (!$this->validate()) {
+        $defSort->attributes['sectorName'] = [
+            'asc' => ['sector.sector' => SORT_ASC],
+            'desc' => ['sector.sector' => SORT_DESC],
+            'label' => 'Сектор'
+        ];
+
+        $defSort->attributes['departmentName'] = [
+            'asc' => ['department_structure.structure_category' => SORT_ASC],
+            'desc' => ['department_structure.structure_category' => SORT_DESC],
+            'label' => 'Категория по структуре отдела'
+        ];
+
+        $defSort->attributes['fullName'] = [
+            'asc' => ['employee.last_name' => SORT_ASC],
+            'desc' => ['employee.last_name' => SORT_DESC],
+            'label' => 'ФИО'
+        ];
+
+        $dataProvider->setSort($defSort);
+
+
+        if (!($this->load($params) && $this->validate())) {
             // uncomment the following line if you do not want to return any records when validation fails
             // $query->where('0=1');
+            $query->joinWith(['sectors'])
+                ->joinWith(['departments']);
             return $dataProvider;
         }
 
@@ -61,14 +88,23 @@ class EmployeeSearch extends Employee
         $query->andFilterWhere([
             'id' => $this->id,
             'department_id' => $this->department_id,
-            'sector_id' => $this->sector_id,
             'status' => $this->status,
         ]);
 
-        $query->andFilterWhere(['like', 'first_name', $this->first_name])
-            ->andFilterWhere(['like', 'middle_name', $this->middle_name])
-            ->andFilterWhere(['like', 'last_name', $this->last_name]);
+        $query->andFilterWhere(['like', 'first_name', $this->fullName])
+            ->orFilterWhere(['like', 'middle_name', $this->fullName])
+            ->orFilterWhere(['like', 'last_name', $this->fullName]);
+
+        // Фильтр по сектору
+        $query->joinWith(['sectors' => function ($q) {
+            $q->where('sector.sector LIKE "%' . $this->sectorName . '%"');
+        }]);
+
+        $query->joinWith(['departments' => function ($q) {
+            $q->where('department_structure.structure_category LIKE "%' . $this->departmentName . '%"');
+        }]);
 
         return $dataProvider;
     }
+
 }

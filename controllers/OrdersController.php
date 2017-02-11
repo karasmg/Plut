@@ -36,9 +36,19 @@ class OrdersController extends Controller
     public function actionIndex()
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => Orders::find(),
+            'query' => Orders::find()
+                /*
+                ->select('orders.*, `employee`.`last_name` as worker ')
+                ->leftJoin('employee', '`orders`.`responsible_id` = `employee`.`id`')
+                ->with('employee'),
+                */
         ]);
-
+/*
+        echo '<pre>';
+        var_dump($dataProvider);
+        echo '</pre>';
+        exit(0);
+*/
         return $this->render('index', [
             'dataProvider' => $dataProvider,
         ]);

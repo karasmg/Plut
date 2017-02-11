@@ -5,7 +5,7 @@ use yii\widgets\ActiveForm;
 use app\models\Employee;
 use yii\helpers\ArrayHelper;
 use yii\jui\DatePicker;
-use yii\jui\AutoComplete;
+use kartik\select2\Select2;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Orders */
@@ -25,25 +25,19 @@ use yii\jui\AutoComplete;
 
     <?php
     $items = Employee::find()
-        ->select(['id as value', 'last_name as label'])
+        ->select(['id as value', 'concat(last_name, " ", first_name, " ", middle_name) as label'])
         ->asArray()
         ->all();
-    echo "<pre>";
-    var_dump($items);
-    echo "</pre>";
-    //exit(0);
-    ?>
+    $items = ArrayHelper::map($items, 'value', 'label');
 
-    <?= $form->field($model, 'responsible_id')->widget(
-        AutoComplete::className(), [
-        'clientOptions' => [
-            'source' => $items,
-            'minLength'=>'3',
 
-        ],
-        'options'=>[
-            'class'=>'form-control'
-        ]
+    echo $form->field($model, 'responsible_id')->widget(Select2::className(),
+        [
+            'data' => $items,
+            'options' => ['placeholder' => 'Выберите ответственного сотрудника ...'],
+            'pluginOptions' => [
+                'allowClear' => true
+            ],
     ]);
     ?>
 

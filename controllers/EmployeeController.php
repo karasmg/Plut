@@ -38,7 +38,12 @@ class EmployeeController extends Controller
     {
         $searchModel = new EmployeeSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
+/*
+        echo '<pre>';
+        var_dump($dataProvider );
+        echo '</pre>';
+        exit(0);
+*/
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
