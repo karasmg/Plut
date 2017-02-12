@@ -75,6 +75,7 @@ class EmployeeSearch extends Employee
 
         $dataProvider->setSort($defSort);
 
+        $this->status = 1; //устанавливается по-умолчанию
 
         if (!($this->load($params) && $this->validate())) {
             // uncomment the following line if you do not want to return any records when validation fails

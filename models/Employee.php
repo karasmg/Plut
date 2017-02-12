@@ -72,8 +72,10 @@ class Employee extends \yii\db\ActiveRecord
             'first_name' => Yii::t('app', 'Имя'),
             'middle_name' => Yii::t('app', 'Отчество'),
             'last_name' => Yii::t('app', 'Фамилия'),
+            'department_id' => Yii::t('app', 'Категория по структуре отдела'),
             'departmentName' => Yii::t('app', 'Категория по структуре отдела'),
             'status' => Yii::t('app', 'Статус'),
+            'sector_id' => Yii::t('app', 'Сектор'),
             'sectorName' => Yii::t('app', 'Сектор'),
             'fullName' => Yii::t('app', 'ФИО'),
         ];
