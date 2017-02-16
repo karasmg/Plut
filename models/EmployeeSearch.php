@@ -68,8 +68,8 @@ class EmployeeSearch extends Employee
         ];
 
         $defSort->attributes['fullName'] = [
-            'asc' => ['employee.last_name' => SORT_ASC],
-            'desc' => ['employee.last_name' => SORT_DESC],
+            'asc' => ['employee.last_name' => SORT_ASC, 'employee.first_name' => SORT_ASC, 'employee.middle_name' => SORT_ASC],
+            'desc' => ['employee.last_name' => SORT_DESC, 'employee.first_name' => SORT_DESC, 'employee.middle_name' => SORT_DESC],
             'label' => 'ФИО'
         ];
 
@@ -96,6 +96,7 @@ class EmployeeSearch extends Employee
             ->orFilterWhere(['like', 'middle_name', $this->fullName])
             ->orFilterWhere(['like', 'last_name', $this->fullName]);
 
+      //  where ... and (first_name like %$this->fullName% or middle_name like %$this->fullName% or last_name like %$this->fullName%)
         // Фильтр по сектору
         $query->joinWith(['sectors' => function ($q) {
             $q->where('sector.sector LIKE "%' . $this->sectorName . '%"');
