@@ -36,13 +36,31 @@ class Employee extends \yii\db\ActiveRecord
             [['first_name', 'middle_name', 'last_name'], 'string', 'max' => 55],
         ];
     }
+
     public function getSectors(){
         return $this->hasOne(Sector::className(), ['id'=>'sector_id']);
     }
 
+    /* Геттер для названия сектора*/
+    public function getSectorName() {
+        return $this->sectors->sector;
+    }
+
+
     public function getDepartments(){
         return $this->hasOne(DepartmentStructure::className(), ['id'=>'department_id']);
     }
+
+    /* Геттер для названия департамента*/
+    public function getDepartmentName() {
+        return $this->departments->structure_category;
+    }
+
+    /* Геттер для ФИО*/
+    public function getFullName() {
+        return $this->last_name. ' '. $this->first_name. ' ' . $this->middle_name;
+    }
+
 
     /**
      * @inheritdoc
@@ -55,8 +73,11 @@ class Employee extends \yii\db\ActiveRecord
             'middle_name' => Yii::t('app', 'Отчество'),
             'last_name' => Yii::t('app', 'Фамилия'),
             'department_id' => Yii::t('app', 'Категория по структуре отдела'),
-            'sector_id' => Yii::t('app', 'Сектор'),
+            'departmentName' => Yii::t('app', 'Категория по структуре отдела'),
             'status' => Yii::t('app', 'Статус'),
+            'sector_id' => Yii::t('app', 'Сектор'),
+            'sectorName' => Yii::t('app', 'Сектор'),
+            'fullName' => Yii::t('app', 'ФИО'),
         ];
     }
 

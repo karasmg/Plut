@@ -3,16 +3,16 @@
 namespace app\controllers;
 
 use Yii;
-use app\models\Orders;
+use app\models\WorkDays;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * OrdersController implements the CRUD actions for Orders model.
+ * WorkDaysController implements the CRUD actions for WorkDays model.
  */
-class OrdersController extends Controller
+class WorkdaysController extends Controller
 {
     /**
      * @inheritdoc
@@ -30,33 +30,29 @@ class OrdersController extends Controller
     }
 
     /**
-     * Lists all Orders models.
+     * Lists all WorkDays models.
      * @return mixed
      */
     public function actionIndex()
     {
+        if( isset($_POST['id']) && isset($_POST['hours']) ) {
+            $model = $this->findModel((int)Yii::$app->request->post('id'));
+            $model->hours = (int)$_POST['hours'];
+            $model->save();
+        }
+
         $dataProvider = new ActiveDataProvider([
-            'query' => Orders::find()
-                /*
-                ->select('orders.*, `employee`.`last_name` as worker ')
-                ->leftJoin('employee', '`orders`.`responsible_id` = `employee`.`id`')
-                ->with('employee'),
-                */
+            'query' => WorkDays::find(),
         ]);
-/*
-        echo '<pre>';
-        var_dump($dataProvider);
-        echo '</pre>';
-        exit(0);
-*/
+
         return $this->render('index', [
             'dataProvider' => $dataProvider,
         ]);
     }
 
     /**
-     * Displays a single Orders model.
-     * @param string $id
+     * Displays a single WorkDays model.
+     * @param integer $id
      * @return mixed
      */
     public function actionView($id)
@@ -67,13 +63,13 @@ class OrdersController extends Controller
     }
 
     /**
-     * Creates a new Orders model.
+     * Creates a new WorkDays model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Orders();
+        $model = new WorkDays();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -85,9 +81,9 @@ class OrdersController extends Controller
     }
 
     /**
-     * Updates an existing Orders model.
+     * Updates an existing WorkDays model.
      * If update is successful, the browser will be redirected to the 'view' page.
-     * @param string $id
+     * @param integer $id
      * @return mixed
      */
     public function actionUpdate($id)
@@ -104,9 +100,9 @@ class OrdersController extends Controller
     }
 
     /**
-     * Deletes an existing Orders model.
+     * Deletes an existing WorkDays model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param string $id
+     * @param integer $id
      * @return mixed
      */
     public function actionDelete($id)
@@ -116,16 +112,18 @@ class OrdersController extends Controller
         return $this->redirect(['index']);
     }
 
+
+
     /**
-     * Finds the Orders model based on its primary key value.
+     * Finds the WorkDays model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param string $id
-     * @return Orders the loaded model
+     * @param integer $id
+     * @return WorkDays the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Orders::findOne($id)) !== null) {
+        if (($model = WorkDays::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

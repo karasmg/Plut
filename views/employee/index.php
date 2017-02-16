@@ -13,7 +13,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="employee-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+    <?php  //echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
         <?= Html::a(Yii::t('app', 'Создать сотрудника'), ['create'], ['class' => 'btn btn-success']) ?>
@@ -23,15 +23,22 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
-            'last_name',
-            'first_name',
-            'middle_name',
-            'departments.structure_category',
-             'sectors.sector',
-             'status',
-
-            ['class' => 'yii\grid\ActionColumn'],
+            'fullName',
+            'departmentName',
+            'sectorName',
+            [
+                'label' => 'Статус',
+                'attribute' => 'status',
+                'format' => 'raw',
+                'value' => function ($model, $index) {
+                    return Html::checkbox('status[]', $model->status, ['value' => $index, 'disabled' => true]);
+                },
+                'filter'=>array("1"=>"Работает","0"=>"Не работает"),
+            ],
+            [
+                'class' => 'yii\grid\ActionColumn',
+                 'template' => '{update}',
+            ],
         ],
     ]); ?>
 </div>

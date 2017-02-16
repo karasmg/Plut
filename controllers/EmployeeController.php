@@ -36,9 +36,17 @@ class EmployeeController extends Controller
      */
     public function actionIndex()
     {
+        if(empty(Yii::$app->request->queryParams))
+            Yii::$app->request->queryParams = ['EmployeeSearch'=>['status'=>1]];
+
         $searchModel = new EmployeeSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
+/*
+        echo '<pre>';
+        var_dump($dataProvider );
+        echo '</pre>';
+        exit(0);
+*/
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -67,7 +75,7 @@ class EmployeeController extends Controller
         $model = new Employee();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['index']);
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -86,7 +94,7 @@ class EmployeeController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['index']);
         } else {
             return $this->render('update', [
                 'model' => $model,
