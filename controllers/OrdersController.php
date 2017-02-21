@@ -4,7 +4,7 @@ namespace app\controllers;
 
 use Yii;
 use app\models\Orders;
-use yii\data\ActiveDataProvider;
+use app\models\OrdersSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -35,21 +35,11 @@ class OrdersController extends Controller
      */
     public function actionIndex()
     {
-        $dataProvider = new ActiveDataProvider([
-            'query' => Orders::find()
-                /*
-                ->select('orders.*, `employee`.`last_name` as worker ')
-                ->leftJoin('employee', '`orders`.`responsible_id` = `employee`.`id`')
-                ->with('employee'),
-                */
-        ]);
-/*
-        echo '<pre>';
-        var_dump($dataProvider);
-        echo '</pre>';
-        exit(0);
-*/
+        $searchModel = new OrdersSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
         return $this->render('index', [
+            'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
     }

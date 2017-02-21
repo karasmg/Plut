@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use app\models\Employee;
+use app\models\Project;
 use yii\helpers\ArrayHelper;
 use yii\jui\DatePicker;
 use kartik\select2\Select2;
@@ -18,10 +19,32 @@ use kartik\select2\Select2;
 
     <?= $form->field($model, 'number')->textInput(['maxlength' => true]) ?>
 
+    <?php
+    $items = Project::find()
+        ->select(['id as value', 'concat(number, " ", name) as label'])
+        ->asArray()
+        ->all();
+    $items = ArrayHelper::map($items, 'value', 'label');
+    asort($items);
+    reset($items);
+    echo $form->field($model, 'project_id')->widget(Select2::className(),
+        [
+            'data' => $items,
+            'options' => ['placeholder' => 'Выберите принадлежность к проекту ...'],
+            'pluginOptions' => [
+                'allowClear' => true
+            ],
+        ]);
+    ?>
+
     <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
 
-
-
+    <?php
+    $items = Employee::find()
+        ->select(['id as value', 'last_name as label'])
+        ->asArray()
+        ->all();
+    ?>
 
     <?php
     $items = Employee::find()
@@ -29,8 +52,8 @@ use kartik\select2\Select2;
         ->asArray()
         ->all();
     $items = ArrayHelper::map($items, 'value', 'label');
-
-
+    asort($items);
+    reset($items);
     echo $form->field($model, 'responsible_id')->widget(Select2::className(),
         [
             'data' => $items,
@@ -38,19 +61,8 @@ use kartik\select2\Select2;
             'pluginOptions' => [
                 'allowClear' => true
             ],
-    ]);
+        ]);
     ?>
-
-
-
-
-
-
-
-
-
-
-
 
     <?=$form->field($model, 'budget_hours')->textInput(['maxlength' => true]) ?>
 

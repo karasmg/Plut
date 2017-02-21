@@ -36,7 +36,6 @@ class Employee extends \yii\db\ActiveRecord
             [['first_name', 'middle_name', 'last_name'], 'string', 'max' => 55],
         ];
     }
-
     public function getSectors(){
         return $this->hasOne(Sector::className(), ['id'=>'sector_id']);
     }
@@ -45,7 +44,6 @@ class Employee extends \yii\db\ActiveRecord
     public function getSectorName() {
         return $this->sectors->sector;
     }
-
 
     public function getDepartments(){
         return $this->hasOne(DepartmentStructure::className(), ['id'=>'department_id']);
@@ -60,7 +58,6 @@ class Employee extends \yii\db\ActiveRecord
     public function getFullName() {
         return $this->last_name. ' '. $this->first_name. ' ' . $this->middle_name;
     }
-
 
     /**
      * @inheritdoc
