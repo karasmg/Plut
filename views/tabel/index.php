@@ -29,8 +29,8 @@ $this->params['breadcrumbs'][] = $this->title;
             'order_id',
             'wt_id',
             'employee_id',
-            // 't_date',
-            // 't_hours',
+            't_date',
+            't_hours',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],
