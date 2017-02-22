@@ -8,6 +8,8 @@ use Yii;
  * This is the model class for table "employee".
  *
  * @property string $id
+ * @property string $username
+ * @property string $password
  * @property string $first_name
  * @property string $middle_name
  * @property string $last_name
@@ -15,8 +17,9 @@ use Yii;
  * @property string $sector_id
  * @property string $status
  */
-class Employee extends \yii\db\ActiveRecord
+class Employee extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
 {
+
     /**
      * @inheritdoc
      */
@@ -31,9 +34,14 @@ class Employee extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['first_name', 'middle_name', 'last_name', 'department_id', 'sector_id'], 'required'],
+            [['first_name', 'middle_name', 'last_name', 'department_id', 'sector_id', 'username', 'password'], 'required'],
             [['department_id', 'sector_id', 'status'], 'integer'],
             [['first_name', 'middle_name', 'last_name'], 'string', 'max' => 55],
+            [['username'], 'string', 'max' => 30],
+            [['username'], 'unique'],
+            [['password'], 'string', 'max' => 50],
+            [['password'], 'validatePassword'],
+
         ];
     }
     public function getSectors(){
@@ -66,6 +74,8 @@ class Employee extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
+            'username' => Yii::t('app', 'Логин'),
+            'password' => Yii::t('app', 'Пароль'),
             'first_name' => Yii::t('app', 'Имя'),
             'middle_name' => Yii::t('app', 'Отчество'),
             'last_name' => Yii::t('app', 'Фамилия'),
@@ -86,4 +96,70 @@ class Employee extends \yii\db\ActiveRecord
     {
         return new EmployeeQuery(get_called_class());
     }
+
+    /**
+     * @inheritdoc
+     */
+    public static function findIdentity($id)
+    {
+        $user = self::findOne($id);
+        return !is_null($user) ? new static($user) : null;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public static function findIdentityByAccessToken($token, $type = null)
+    {
+        return null;
+    }
+
+    /**
+     * Finds user by username
+     *
+     * @param string $username
+     * @return static|null
+     */
+    public static function findByUsername($username)
+    {
+        $user = self::find()->where(['username'=>$username])->one();
+        return !is_null($user) ? new static($user) : null;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getAuthKey()
+    {
+        return false;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function validateAuthKey($authKey)
+    {
+        return false;
+    }
+
+    /**
+     * Validates password
+     *
+     * @param string $password password to validate
+     * @return bool if password provided is valid for current user
+     */
+    public function validatePassword($password)
+    {
+        return $this->password === md5(md5($password));
+    }
+
+
 }

@@ -70,7 +70,10 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-       /*
+        /*
+        echo md5(md5('admin'));
+        exit(0);
+
         $emp=Employee::findBySql('
                                   SELECT e.`id`,`first_name`,`middle_name`,`last_name`,`sector`, structure_category as department, `status`
                                   FROM `employee` as e
