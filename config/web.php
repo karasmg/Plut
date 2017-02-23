@@ -7,7 +7,24 @@ $config = [
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'language' => 'ru-RU',
+    'modules' => [
+        'rbac' => [
+            'class' => 'karasmg\rbac\Module',
+            'as access' => [ // if you need to set access
+                'class' => 'yii\filters\AccessControl',
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['@'] // all auth users
+                    ],
+                ]
+            ]
+        ],
+    ],
     'components' => [
+        'authManager' => [
+            'class' => 'yii\rbac\DbManager',
+        ],
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'rqSyzQuWe6O21xhYP3OB_QaHKpo5u0LY',
@@ -17,7 +34,7 @@ $config = [
             'class' => 'yii\caching\FileCache',
         ],
         'user' => [
-            'identityClass' => 'app\models\Employee',
+            'identityClass' => 'app\models\User',
             'enableAutoLogin' => false,
         ],
         'errorHandler' => [

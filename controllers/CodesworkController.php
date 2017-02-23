@@ -5,14 +5,14 @@ namespace app\controllers;
 use Yii;
 use app\models\CodesWork;
 use app\models\CodesworkSearch;
-use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use app\components\ParentController;
 
 /**
  * CodesworkController implements the CRUD actions for CodesWork model.
  */
-class CodesworkController extends Controller
+class CodesworkController extends ParentController
 {
     /**
      * @inheritdoc

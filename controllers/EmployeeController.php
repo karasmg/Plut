@@ -5,14 +5,14 @@ namespace app\controllers;
 use Yii;
 use app\models\Employee;
 use app\models\EmployeeSearch;
-use yii\web\Controller;
+use app\components\ParentController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
  * EmployeeController implements the CRUD actions for Employee model.
  */
-class EmployeeController extends Controller
+class EmployeeController extends ParentController
 {
 
     /**

@@ -5,14 +5,14 @@ namespace app\controllers;
 use Yii;
 use app\models\WorkDays;
 use yii\data\ActiveDataProvider;
-use yii\web\Controller;
+use app\components\ParentController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
  * WorkDaysController implements the CRUD actions for WorkDays model.
  */
-class WorkdaysController extends Controller
+class WorkdaysController extends ParentController
 {
     /**
      * @inheritdoc

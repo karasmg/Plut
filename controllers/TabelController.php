@@ -5,14 +5,14 @@ namespace app\controllers;
 use Yii;
 use app\models\Tabel;
 use app\models\TabelSearch;
-use yii\web\Controller;
+use app\components\ParentController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
  * TabelController implements the CRUD actions for Tabel model.
  */
-class TabelController extends Controller
+class TabelController extends ParentController
 {
     /**
      * @inheritdoc

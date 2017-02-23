@@ -59,7 +59,8 @@ AppAsset::register($this);
                     ['label' => 'Категории по структуре отдела', 'url' => ['/departmentstructure/']],
                     ['label' => 'Сектора', 'url' => ['/sector/']],
                     ['label' => 'Категории по проектам', 'url' => ['/projectcategory/']],
-                    ['label' => 'Виды работ', 'url' => ['/worktypes/']]
+                    ['label' => 'Виды работ', 'url' => ['/worktypes/']],
+                    ['label' => 'Контроль доступа', 'url' => ['/rbac/']]
                 ]
             ],
             Yii::$app->user->isGuest ? (
