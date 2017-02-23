@@ -4,10 +4,9 @@
 /* @var $content string */
 
 use yii\helpers\Html;
-use yii\bootstrap\Nav;
-use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
+use app\widgets\topmenu\TopmenuWidget;
 
 AppAsset::register($this);
 ?>
@@ -25,61 +24,7 @@ AppAsset::register($this);
 <?php $this->beginBody() ?>
 
 <div class="wrap">
-    <?php
-    NavBar::begin([
-        'brandLabel' => 'Учёт рабочего времени',
-        'brandUrl' => Yii::$app->homeUrl,
-        'options' => [
-            'class' => 'navbar-inverse navbar-fixed-top',
-        ],
-    ]);
-    echo Nav::widget([
-        'options' => ['class' => 'navbar-nav navbar-right'],
-        'items' => [
-            ['label' => 'Главная', 'url' => ['/site/index']],
-            ['label' => 'О приложении', 'url' => ['/site/about']],
-            ['label' => 'Таблицы',  'visible' => !Yii::$app->user->isGuest,
-                'items' => [
-                    ['label' => 'Сотрудники', 'url' => ['/employee/']],
-                    ['label' => 'Коды работ', 'url' => ['/codeswork/']],
-                    ['label' => 'Заказы', 'url' => ['/orders/']],
-                    ['label' => 'Проекты', 'url' => ['/project/']],
-                ]],
-            ['label' => 'Создать', 'visible' => !Yii::$app->user->isGuest,
-                'items' => [
-                    ['label' => 'Создать сотрудника', 'url' => ['/employee/create/']],
-                    ['label' => 'Создать код работ', 'url' => ['/codeswork/create/']],
-                    ['label' => 'Создать заказ', 'url' => ['/orders/create/']],
-                    ['label' => 'Создать проект', 'url' => ['/project/create/']],
-                ]
-            ],
-            ['label' => 'Справочники',
-                'visible' => !Yii::$app->user->isGuest,
-                'items' => [
-                    ['label' => 'Категории по структуре отдела', 'url' => ['/departmentstructure/']],
-                    ['label' => 'Сектора', 'url' => ['/sector/']],
-                    ['label' => 'Категории по проектам', 'url' => ['/projectcategory/']],
-                    ['label' => 'Виды работ', 'url' => ['/worktypes/']],
-                    ['label' => 'Контроль доступа', 'url' => ['/rbac/']]
-                ]
-            ],
-            Yii::$app->user->isGuest ? (
-            ['label' => 'Войти', 'url' => ['/site/login']]
-            ) : (
-                '<li>'
-                . Html::beginForm(['/site/logout'], 'post')
-                . Html::submitButton(
-                    'Выйти (' . Yii::$app->user->identity->username . ')',
-                    ['class' => 'btn btn-link logout']
-                )
-                . Html::endForm()
-                . '</li>'
-            )
-        ],
-    ]);
-    NavBar::end();
-    ?>
-
+    <?= TopmenuWidget::widget() ?>
     <div class="container">
         <?= Breadcrumbs::widget([
             'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],

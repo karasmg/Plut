@@ -2,12 +2,14 @@
 
 namespace app\controllers;
 
+use app\models\AuthItem;
 use Yii;
 use app\models\Employee;
 use app\models\EmployeeSearch;
 use app\components\ParentController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\helpers\ArrayHelper;
 
 /**
  * EmployeeController implements the CRUD actions for Employee model.
@@ -44,9 +46,13 @@ class EmployeeController extends ParentController
                 echo '</pre>';
                 exit(0);
         */
+        $roles = AuthItem::find()->where('type = 1')->all();
+        $roles = ArrayHelper::map($roles, 'name', 'name');
+
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'roles' => $roles,
         ]);
     }
 

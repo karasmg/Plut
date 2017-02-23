@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use app\models\Sector;
+use app\models\AuthItem;
 use app\models\DepartmentStructure;
 use yii\helpers\ArrayHelper;
 
@@ -12,9 +13,11 @@ use yii\helpers\ArrayHelper;
 ?>
 
 <div class="employee-form">
-
     <?php $form = ActiveForm::begin(); ?>
-
+    <?php
+        if(!empty($model->errors))
+            var_dump($model->errors);
+    ?>
     <?= $form->field($model, 'first_name')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'middle_name')->textInput(['maxlength' => true]) ?>
@@ -39,7 +42,16 @@ use yii\helpers\ArrayHelper;
     ];
     ?>
     <?= $form->field($model, 'sector_id')->dropDownList($items,$params);?>
-
+    <?= $form->field($model, 'username')->textInput(['maxlength' => true]);?>
+    <?php
+    $roles = AuthItem::find()->where('type = 1')->all();
+    $items = ArrayHelper::map($roles, 'name', 'name');
+    $params = [
+        'prompt' => 'Выберите роль...'
+    ];
+    ?>
+    <?= $form->field($model, 'role')->dropDownList($items,$params);?>
+    <?= $form->field($model, 'new_pass')->textInput(['maxlength' => true]);?>
 
     <?= $form->field($model, 'status')->checkbox([
         'label' => 'Сотрудник работает?',
