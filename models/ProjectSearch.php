@@ -13,6 +13,11 @@ use app\models\Project;
 class ProjectSearch extends Project
 {
     public $fullName;
+    public $planned_end_date_from;
+    public $planned_end_date_till;
+    public $actual_end_date_from;
+    public $actual_end_date_till;
+
     /**
      * @inheritdoc
      */
@@ -20,7 +25,7 @@ class ProjectSearch extends Project
     {
         return [
             [['id', 'status', 'responsible_id', 'budget_hours'], 'integer'],
-            [['number', 'name', 'customer', 'planned_end_date', 'actual_end_date', 'fullName'], 'safe'],
+            [['number', 'name', 'customer', 'planned_end_date', 'planned_end_date_from', 'planned_end_date_till', 'actual_end_date_from', 'actual_end_date_till', 'actual_end_date', 'fullName'], 'safe'],
         ];
     }
 
@@ -57,7 +62,6 @@ class ProjectSearch extends Project
         ];
 
         $dataProvider->setSort($defSort);
-        $this->status = 1; //устанавливается по-умолчанию
 
         //$this->load($params);
 
@@ -71,13 +75,15 @@ class ProjectSearch extends Project
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'status' => $this->status,
+            'project.status' => $this->status,
             'responsible_id' => $this->responsible_id,
             'budget_hours' => $this->budget_hours,
-            'planned_end_date' => $this->planned_end_date,
-            'actual_end_date' => $this->actual_end_date,
         ]);
 
+        $query->andFilterWhere(['>=', 'planned_end_date', $this->planned_end_date_from ? $this->planned_end_date_from : null])
+            ->andFilterWhere(['<=', 'planned_end_date', $this->planned_end_date_till ? $this->planned_end_date_till : null])
+            ->andFilterWhere(['>=', 'actual_end_date', $this->actual_end_date_from ? $this->actual_end_date_from : null])
+            ->andFilterWhere(['<=', 'actual_end_date', $this->actual_end_date_till ? $this->actual_end_date_till : null]);
 
         $query->andFilterWhere(['like', 'last_name', $this->fullName])
             ->orFilterWhere(['like', 'first_name', $this->fullName])
@@ -85,15 +91,9 @@ class ProjectSearch extends Project
 
        $query->joinWith(['employees' => function ($q) {
             $q->where('employee.last_name LIKE "%' . $this->fullName . '%"' .
-                'employee.first_name LIKE "%' . $this->fullName . '%"' .
-                'employee.middle_name LIKE "%' . $this->fullName . '%"');
+                ' OR employee.first_name LIKE "%' . $this->fullName . '%"' .
+                ' OR employee.middle_name LIKE "%' . $this->fullName . '%"');
         }]);
-
-
-      //  $query->andWhere('last_name LIKE "%' . $this->fullName . '%" ' .
-           // 'OR middle_name LIKE "%' . $this->fullName . '%"' .
-           // 'OR first_name LIKE "%' . $this->fullName . '%"'
-      ///  );
 
         return $dataProvider;
     }

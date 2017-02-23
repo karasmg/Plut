@@ -2,6 +2,8 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use yii\jui\DatePicker;
+use yii\widgets\Pjax;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\ProjectSearch */
@@ -18,6 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <p>
         <?= Html::a(Yii::t('app', 'Создать проект'), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
+    <?php Pjax::begin(); ?>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
@@ -28,12 +31,61 @@ $this->params['breadcrumbs'][] = $this->title;
             'name',
             'customer',
             'budget_hours',
-            'planned_end_date',
-            'actual_end_date',
+            [
+                'attribute' => 'planned_end_date',
+                'format' => 'raw',
+                'value' => function ($model, $index) {
+                    return Html::tag('planned_end_date[]', $model->planned_end_date);
+                },
+/*
+                'filter' =>
+                    Html::tag(
+                        'div',
+                        Html::tag('div', Html::activeTextInput($searchModel, 'planned_end_date_from', ['class' => 'form-control']), ['class' => 'col-xs-6']) .
+                        Html::tag('div', Html::activeTextInput($searchModel, 'planned_end_date_till', ['class' => 'form-control']), ['class' => 'col-xs-6']),
+                        ['class' => 'row']
+                    ),
+*/
+                'filter' =>
+                    DatePicker::widget([
+                        'model' => $searchModel,
+                        'attribute' => 'planned_end_date_from',
+                        'value' => $value,
+                        'dateFormat' => 'yyyy-MM-dd',
+                    ]).
+                    DatePicker::widget([
+                        'model' => $searchModel,
+                        'attribute' => 'planned_end_date_till',
+                        'value' => $value,
+                        'dateFormat' => 'yyyy-MM-dd',
+                    ])
+
+            ],
+            [
+                'attribute' => 'actual_end_date',
+                'format' => 'raw',
+                'value' => function ($model, $index) {
+                    return Html::tag('actual_end_date[]', $model->actual_end_date);
+                },
+                'filter' =>
+                    DatePicker::widget([
+                        'model' => $searchModel,
+                        'attribute' => 'actual_end_date_from',
+                        'value' => $value,
+                        'dateFormat' => 'yyyy-MM-dd',
+                    ]).
+                    DatePicker::widget([
+                        'model' => $searchModel,
+                        'attribute' => 'actual_end_date_till',
+                        'value' => $value,
+                        'dateFormat' => 'yyyy-MM-dd',
+                    ])
+
+            ],
             'status',
 
             ['class' => 'yii\grid\ActionColumn'],
            // 'template' => '{update}',// иконки удалить, обновить, просмотр....
         ],
     ]); ?>
-</div>
+    <?php Pjax::end(); ?></div>
