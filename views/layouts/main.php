@@ -21,6 +21,7 @@ AppAsset::register($this);
     <?php $this->head() ?>
 </head>
 <body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <?php $this->beginBody() ?>
 
 <div class="wrap">

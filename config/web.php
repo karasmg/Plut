@@ -66,7 +66,6 @@ $config = [
 
             ],
         ],
-
     ],
     'params' => $params,
 ];

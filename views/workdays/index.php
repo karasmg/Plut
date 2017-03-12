@@ -10,6 +10,19 @@ use yii\widgets\ActiveForm;
 $this->title = Yii::t('app', 'Work Days');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+<script>
+$(document).ready(function(){
+    $('body').on('click', '.hours_change',function(e){
+        e.stopPropagation();
+        e.preventDefault();
+        var form = $(this).closest('form');
+        form.find('.hours_change').hide();
+        form.find('.hours_input').show();
+        form.find('.hours_save').show();
+        form.find('.hours_view').hide();
+    })
+})
+</script>
 <div class="work-days-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
@@ -24,22 +37,22 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'id',
             'date',
-           // 'hours',
-[
+            // 'hours',
+            [
 
-    'attribute' => 'hours',
-    'format' => 'raw',
-    'value' => function ($model, $index) {
-        $res = Html::beginForm(['workdays/index'], 'post', ['data-pjax' => '', 'class' => 'form-inline']);
-        $res .= Html::tag('hours', $model->hours);
-        $res .= Html::input('text', 'hours', $model->hours, ['class' => 'form-control']);
-        $res .= Html::input('hidden', 'id', $model->id, ['class' => 'form-control']);
-        $res .= Html::submitButton('Изменить', ['class' => 'btn btn-primary', 'name' => 'hash-button']);
-        $res .= Html::endForm();
-        return $res;
-    },
-],
-            ['class' => 'yii\grid\ActionColumn'],
+                'attribute' => 'hours',
+                'format' => 'raw',
+                'value' => function ($model, $index) {
+                    $res = Html::beginForm(['workdays/index'], 'post', ['data-pjax' => '', 'class' => 'form-inline']);
+                    $res .= Html::tag('hours', $model->hours, ['class' => 'hours_view']);
+                    $res .= Html::input('text', 'hours', $model->hours, ['class' => 'form-control hours_input']);
+                    $res .= Html::input('hidden', 'id', $model->id, ['class' => 'form-control']);
+                    $res .= Html::submitButton('Изменить', ['class' => 'btn btn-primary hours_change']);
+                    $res .= Html::submitButton('Сохранить', ['class' => 'btn btn-primary hours_save', 'name' => 'hash-button']);
+                    $res .= Html::endForm();
+                    return $res;
+                },
+            ],
         ],
     ]); ?>
 <?php Pjax::end(); ?></div>
