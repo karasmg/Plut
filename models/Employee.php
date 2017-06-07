@@ -174,7 +174,7 @@ class Employee extends \yii\db\ActiveRecord
                 'attribute' => 'photo',
                 'scenarios' => ['insert', 'update'],
                 'placeholder' => '@webroot/uploads/default-placeholder.png',
-                'path' => '@webroot/uploads/',
+                'path' => '@webroot/uploads',
                 'url' => '@web/uploads/',
                 'unlinkOnSave' => true,
                 'unlinkOnDelete' => true,
